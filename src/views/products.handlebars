@@ -1,0 +1,63 @@
+<link rel="stylesheet" href="/css/style.css">
+
+<nav style="margin-bottom: 20px; text-align: right;">
+    <a href="/carts/698d5ceb0f3d30624b8eab2f" class="btn" style="text-decoration: none; background-color: #28a745;">🛒 Ver mi Carrito</a>
+</nav>
+
+<h1>Nuestra Tienda</h1>
+
+<div class="container">
+    {{#each products.docs}}
+    <div class="product-card">
+        <h3>{{this.title}}</h3>
+        <p>{{this.description}}</p>
+        <p><strong>${{this.price}}</strong></p>
+        <button class="btn" onclick="addToCart('{{this._id}}')">Agregar al Carrito</button>
+    </div>
+    {{/each}}
+</div>
+
+<div class="pagination" style="text-align: center; margin-top: 30px; margin-bottom: 50px;">
+    {{#if products.prevLink}}
+        <a href="{{products.prevLink}}" class="btn" style="background-color: #6c757d; text-decoration: none;">⬅️ Anterior</a>
+    {{/if}}
+    
+    <span style="margin: 0 15px; font-weight: bold;">Página {{products.page}} de {{products.totalPages}}</span>
+
+    {{#if products.nextLink}}
+        <a href="{{products.nextLink}}" class="btn" style="background-color: #6c757d; text-decoration: none;">Siguiente ➡️</a>
+    {{/if}}
+</div>
+
+<script>
+    async function addToCart(productId) {
+        const cartId = "698d5ceb0f3d30624b8eab2f"; 
+        
+        try {
+            const response = await fetch(`/api/carts/${cartId}/product/${productId}`, {
+                method: 'POST'
+            });
+
+            if (response.ok) {
+                // USANDO EL SWEETALERT QUE PUSIMOS EN EL MAIN
+                Swal.fire({
+                    title: '¡Agregado!',
+                    text: 'Producto sumado al carrito',
+                    icon: 'success',
+                    timer: 1500,
+                    showConfirmButton: false,
+                    toast: true,
+                    position: 'top-end'
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'No se pudo agregar el producto',
+                });
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+</script>
