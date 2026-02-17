@@ -18,16 +18,24 @@ const PORT = 8080;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// --- Conexión a MongoDB ---
-mongoose.connect(process.env.MONGO_URL)
-    .then(() => console.log("✅ Conectado con éxito a MongoDB Atlas"))
-    .catch(error => console.error("❌ Error de conexión:", error));
+// --- Conexión a MongoDB (Mejorada) ---
+const connectionString = process.env.MONGO_URL;
 
-// --- Configuración de Handlebars (CON HELPERS) ---
+mongoose.connect(connectionString)
+    .then(() => console.log("✅ Conectado con éxito a MongoDB Atlas"))
+    .catch(error => {
+        console.error("❌ Error de conexión:", error);
+        process.exit(); // Detiene el servidor si no hay base de datos
+    });
+
+// --- Configuración de Handlebars ---
 app.engine("handlebars", engine({
     helpers: {
-        // Este helper nos permite hacer {{multiply cantidad precio}} en el HTML
         multiply: (num1, num2) => num1 * num2
+    },
+    runtimeOptions: {
+        allowProtoPropertiesByDefault: true,
+        allowProtoMethodsByDefault: true,
     }
 }));
 app.set("view engine", "handlebars");

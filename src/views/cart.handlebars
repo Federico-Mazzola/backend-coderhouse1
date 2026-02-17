@@ -47,4 +47,47 @@
     {{else}}
     <div style="text-align: center; padding: 30px;">
         <p style="font-size: 1.2rem; color: #666;">El carrito está vacío.</p>
-        <a href="/products
+        <a href="/products" class="btn" style="text-decoration: none;">Ir a ver productos</a>
+    </div>
+    {{/if}}
+</div>
+
+<script>
+    async function deleteProduct(cartId, productId) {
+        try {
+            const response = await fetch(`/api/carts/${cartId}/products/${productId}`, {
+                method: 'DELETE'
+            });
+            const result = await response.json();
+            if (result.status === "success") {
+                location.reload();
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+    async function emptyCart(cartId) {
+        const confirm = await Swal.fire({
+            title: '¿Vaciar carrito?',
+            text: "Se eliminarán todos los productos",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, vaciar',
+            cancelButtonText: 'Cancelar'
+        });
+
+        if (confirm.isConfirmed) {
+            try {
+                const response = await fetch(`/api/carts/${cartId}`, {
+                    method: 'DELETE'
+                });
+                if (response.ok) {
+                    location.reload();
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+    }
+</script>
