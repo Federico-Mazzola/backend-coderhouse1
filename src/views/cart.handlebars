@@ -2,36 +2,49 @@
 
 <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0,0,0,0.1);">
     {{#if cart.products.length}}
-        <table style="width: 100%; border-collapse: collapse;">
-            <thead>
-                <tr style="border-bottom: 2px solid #eee; text-align: left;">
-                    <th style="padding: 10px;">Producto</th>
-                    <th style="padding: 10px;">Descripción</th>
-                    <th style="padding: 10px;">Cantidad</th>
-                    <th style="padding: 10px;">Precio Unitario</th>
-                    <th style="padding: 10px;">Subtotal</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#each cart.products}}
-                <tr style="border-bottom: 1px solid #eee;">
-                    <td style="padding: 10px;"><strong>{{this.product.title}}</strong></td>
-                    <td style="padding: 10px;">{{this.product.description}}</td>
-                    <td style="padding: 10px; text-align: center;">{{this.quantity}}</td>
-                    <td style="padding: 10px;">${{this.product.price}}</td>
-                    <td style="padding: 10px;">${{multiply this.quantity this.product.price}}</td>
-                </tr>
-                {{/each}}
-            </tbody>
-        </table>
-        
-        <div style="margin-top: 20px; text-align: right;">
-            <a href="/products" class="btn" style="background-color: gray;">Volver a la tienda</a>
-            <button class="btn">Finalizar Compra</button>
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="border-bottom: 2px solid #eee; text-align: left;">
+                <th style="padding: 10px;">Producto</th>
+                <th style="padding: 10px;">Descripción</th>
+                <th style="padding: 10px;">Cantidad</th>
+                <th style="padding: 10px;">Precio Unitario</th>
+                <th style="padding: 10px;">Subtotal</th>
+                <th style="padding: 10px; text-align: center;">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each cart.products}}
+            <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 10px;"><strong>{{this.product.title}}</strong></td>
+                <td style="padding: 10px;">{{this.product.description}}</td>
+                <td style="padding: 10px; text-align: center;">{{this.quantity}}</td>
+                <td style="padding: 10px;">${{this.product.price}}</td>
+                <td style="padding: 10px;">${{multiply this.quantity this.product.price}}</td>
+                <td style="padding: 10px; text-align: center;">
+                    <button class="btn" style="background-color: #dc3545; cursor: pointer;"
+                        onclick="deleteProduct('{{../cart._id}}', '{{this.product._id}}')">
+                        🗑️
+                    </button>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+    <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+        <button class="btn" style="background-color: #6c757d;" onclick="emptyCart('{{cart._id}}')">Vaciar
+            Carrito</button>
+
+        <div style="text-align: right;">
+            <a href="/products" class="btn" style="background-color: gray; text-decoration: none;">Volver a la
+                tienda</a>
+            <button class="btn" onclick="Swal.fire('¡Compra exitosa!', 'Tu pedido está en camino', 'success')">Finalizar
+                Compra</button>
         </div>
+    </div>
 
     {{else}}
-        <p>El carrito está vacío.</p>
-        <a href="/products" class="btn">Ir a ver productos</a>
-    {{/if}}
-</div>
+    <div style="text-align: center; padding: 30px;">
+        <p style="font-size: 1.2rem; color: #666;">El carrito está vacío.</p>
+        <a href="/products
